@@ -6,6 +6,7 @@
     filtered: [],
     page: 1,
     canEdit: false,
+    editMode: false,
     pending: {},
     saving: false,
   };
@@ -26,10 +27,15 @@
     pager: document.getElementById("pager"),
     stats: document.getElementById("stats"),
     editBar: document.getElementById("edit-bar"),
+    toggleEditBtn: document.getElementById("toggle-edit-mode"),
     saveBtn: document.getElementById("save-edits"),
     discardBtn: document.getElementById("discard-edits"),
     editStatus: document.getElementById("edit-status"),
   };
+
+  function isEditing() {
+    return state.canEdit && state.editMode;
+  }
 
   function trackKey(t) {
     return window.ArteLivreAuth.trackKey(t);
@@ -62,13 +68,25 @@
       return;
     }
     els.editBar.hidden = false;
+    els.toggleEditBtn.textContent = state.editMode ? "Sair da edição" : "Ativar edição";
+    els.saveBtn.hidden = !state.editMode;
+    els.discardBtn.hidden = !state.editMode;
     els.saveBtn.disabled = n === 0 || state.saving;
     els.discardBtn.disabled = n === 0 || state.saving;
+    els.toggleEditBtn.disabled = state.saving;
+
+    if (!state.editMode) {
+      els.editStatus.textContent = n
+        ? `${n} alteração${n === 1 ? "" : "ões"} não salva${n === 1 ? "" : "s"} — ative a edição para continuar`
+        : "Somente leitura. Ative a edição para mudar BPM, nota ou Camelot.";
+      return;
+    }
+
     els.editStatus.textContent = state.saving
       ? "Salvando no GitHub…"
       : n
         ? `${n} alteração${n === 1 ? "" : "ões"} pendente${n === 1 ? "" : "s"}`
-        : "Edite BPM, nota ou Camelot na tabela";
+        : "Modo edição ativo — altere os campos na tabela";
   }
 
   function applyFilters({ resetPage = true } = {}) {
@@ -131,7 +149,7 @@
         const dirty = Boolean(state.pending[t._key]);
         const mark = dirty || t._overridden ? " row-edited" : "";
 
-        if (state.canEdit) {
+        if (isEditing()) {
           return `
             <tr class="${mark}" data-key="${escapeHtml(t._key)}">
               <td class="mono muted">${escapeHtml(t.pos || "—")}</td>
@@ -164,7 +182,7 @@
       })
       .join("");
 
-    if (state.canEdit) {
+    if (isEditing()) {
       els.tbody.querySelectorAll(".cell-input").forEach((input) => {
         input.addEventListener("change", onCellEdit);
         input.addEventListener("keydown", (e) => {
@@ -243,6 +261,16 @@
     render();
   }
 
+  function toggleEditMode() {
+    if (state.editMode && pendingCount()) {
+      const ok = window.confirm("Há alterações não salvas. Sair da edição e descartá-las?");
+      if (!ok) return;
+      state.pending = {};
+    }
+    state.editMode = !state.editMode;
+    render();
+  }
+
   async function init() {
     try {
       window.ArteLivreAuth.mountHeaderControls(document.getElementById("auth-controls"));
@@ -250,8 +278,13 @@
         const next = Boolean(auth.authenticated);
         if (next !== state.canEdit) {
           state.canEdit = next;
-          if (!next) state.pending = {};
+          if (!next) {
+            state.pending = {};
+            state.editMode = false;
+          }
           render();
+        } else {
+          updateEditBar();
         }
       });
 
@@ -296,6 +329,7 @@
         els.onlyKnown.checked = false;
         applyFilters();
       });
+      els.toggleEditBtn.addEventListener("click", toggleEditMode);
       els.saveBtn.addEventListener("click", saveEdits);
       els.discardBtn.addEventListener("click", discardEdits);
 
