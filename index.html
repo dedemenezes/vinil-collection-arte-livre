@@ -16,10 +16,13 @@
         <span class="brand-name">Arte Livre</span>
         <span class="brand-tag">Coleção de vinil</span>
       </div>
-      <nav class="nav" aria-label="Principal">
-        <a href="albums.html">Albums</a>
-        <a href="tracks.html">Tracks</a>
-      </nav>
+      <div class="header-right">
+        <nav class="nav" aria-label="Principal">
+          <a href="albums.html">Albums</a>
+          <a href="tracks.html">Tracks</a>
+        </nav>
+        <div id="auth-controls" class="auth-controls"></div>
+      </div>
     </header>
 
     <main class="shell home">
@@ -32,8 +35,11 @@
       <p class="home-meta" id="home-meta">Carregando acervo…</p>
     </main>
 
+    <script src="js/config.js"></script>
     <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
     <script>
+      window.ArteLivreAuth.mountHeaderControls(document.getElementById("auth-controls"));
       loadJSON("data/meta.json")
         .then((meta) => {
           document.getElementById("home-meta").innerHTML =

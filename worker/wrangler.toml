@@ -1,0 +1,14 @@
+name = "arte-livre-auth"
+main = "src/index.js"
+compatibility_date = "2024-11-12"
+account_id = "0a05664e6680e5e3ae21b78906ef65c5"
+
+workers_dev = true
+
+[vars]
+ALLOWED_LOGIN = "dedemenezes"
+GITHUB_OWNER = "dedemenezes"
+GITHUB_REPO = "vinil-collection-arte-livre"
+GITHUB_BRANCH = "main"
+SITE_ORIGIN = "https://dedemenezes.github.io"
+OVERRIDES_PATH = "data/track_overrides.json"

@@ -16,16 +16,19 @@
         <span class="brand-name">Arte Livre</span>
         <span class="brand-tag">Coleção de vinil</span>
       </a>
-      <nav class="nav" aria-label="Principal">
-        <a href="albums.html">Albums</a>
-        <a href="tracks.html" aria-current="page">Tracks</a>
-      </nav>
+      <div class="header-right">
+        <nav class="nav" aria-label="Principal">
+          <a href="albums.html">Albums</a>
+          <a href="tracks.html" aria-current="page">Tracks</a>
+        </nav>
+        <div id="auth-controls" class="auth-controls"></div>
+      </div>
     </header>
 
     <main class="shell">
       <div class="page-head">
         <h1>Tracks</h1>
-        <p>Busque faixas por nome, artista ou disco. Filtre por BPM, nota e Camelot.</p>
+        <p>Busque faixas por nome, artista ou disco. Filtre por BPM, nota e Camelot. Logado, você edita e salva no GitHub.</p>
         <div class="stats" id="stats"></div>
       </div>
 
@@ -67,6 +70,14 @@
         </div>
       </section>
 
+      <div class="edit-bar" id="edit-bar" hidden>
+        <span id="edit-status" class="edit-status"></span>
+        <div class="edit-actions">
+          <button type="button" class="btn btn-ghost" id="discard-edits">Descartar</button>
+          <button type="button" class="btn" id="save-edits">Salvar no GitHub</button>
+        </div>
+      </div>
+
       <section id="results" hidden>
         <p class="result-meta" id="result-meta"></p>
         <div class="table-wrap" id="table-wrap">
@@ -90,7 +101,9 @@
       </section>
     </main>
 
+    <script src="js/config.js"></script>
     <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
     <script src="js/tracks.js"></script>
   </body>
 </html>

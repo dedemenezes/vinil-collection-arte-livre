@@ -2,3 +2,6 @@
 .vscode/
 .idea/
 *.log
+worker/.dev.vars
+worker/node_modules/
+.wrangler/
