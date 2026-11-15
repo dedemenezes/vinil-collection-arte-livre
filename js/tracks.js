@@ -46,35 +46,41 @@
     return `${normalize(t.artist)}::${normalize(t.title)}::${normalize(t.pos || "")}`;
   }
 
-  function overrideForTrack(t) {
-    const direct = state.overrides[trackKey(t)];
-    if (direct) return direct;
-    const sid = songId(t);
-    for (const other of state.baseTracks) {
-      if (songId(other) !== sid) continue;
-      const over = state.overrides[trackKey(other)];
-      if (over) return over;
+  function buildSongOverrideIndex() {
+    const bySong = new Map();
+    for (const t of state.baseTracks) {
+      const over = state.overrides[trackKey(t)];
+      if (!over) continue;
+      bySong.set(songId(t), over);
     }
-    return null;
+    return bySong;
   }
 
   function expandPendingToDuplicates(pending) {
+    const byKey = new Map(state.baseTracks.map((t) => [trackKey(t), t]));
+    const bySong = new Map();
+    for (const t of state.baseTracks) {
+      const sid = songId(t);
+      if (!bySong.has(sid)) bySong.set(sid, []);
+      bySong.get(sid).push(t);
+    }
+
     const expanded = { ...pending };
     for (const [key, patch] of Object.entries(pending)) {
-      const seed = state.baseTracks.find((t) => trackKey(t) === key);
+      const seed = byKey.get(key);
       if (!seed) continue;
-      const sid = songId(seed);
-      for (const t of state.baseTracks) {
-        if (songId(t) === sid) expanded[trackKey(t)] = { ...patch };
+      for (const t of bySong.get(songId(seed)) || []) {
+        expanded[trackKey(t)] = { ...patch };
       }
     }
     return expanded;
   }
 
   function mergeTracks() {
+    const bySong = buildSongOverrideIndex();
     state.tracks = state.baseTracks.map((t) => {
       const key = trackKey(t);
-      const over = overrideForTrack(t);
+      const over = state.overrides[key] || bySong.get(songId(t)) || null;
       if (!over) return { ...t, _key: key, _overridden: false };
       return {
         ...t,
