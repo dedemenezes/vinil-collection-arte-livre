@@ -41,10 +41,40 @@
     return window.ArteLivreAuth.trackKey(t);
   }
 
+  // Same song on different pressings/releases shares edits.
+  function songId(t) {
+    return `${normalize(t.artist)}::${normalize(t.title)}::${normalize(t.pos || "")}`;
+  }
+
+  function overrideForTrack(t) {
+    const direct = state.overrides[trackKey(t)];
+    if (direct) return direct;
+    const sid = songId(t);
+    for (const other of state.baseTracks) {
+      if (songId(other) !== sid) continue;
+      const over = state.overrides[trackKey(other)];
+      if (over) return over;
+    }
+    return null;
+  }
+
+  function expandPendingToDuplicates(pending) {
+    const expanded = { ...pending };
+    for (const [key, patch] of Object.entries(pending)) {
+      const seed = state.baseTracks.find((t) => trackKey(t) === key);
+      if (!seed) continue;
+      const sid = songId(seed);
+      for (const t of state.baseTracks) {
+        if (songId(t) === sid) expanded[trackKey(t)] = { ...patch };
+      }
+    }
+    return expanded;
+  }
+
   function mergeTracks() {
     state.tracks = state.baseTracks.map((t) => {
       const key = trackKey(t);
-      const over = state.overrides[key];
+      const over = overrideForTrack(t);
       if (!over) return { ...t, _key: key, _overridden: false };
       return {
         ...t,
@@ -267,9 +297,10 @@
     state.saving = true;
     updateEditBar();
     try {
+      const updates = expandPendingToDuplicates(state.pending);
       const data = await window.ArteLivreAuth.saveOverrides(
-        state.pending,
-        `Edit ${pendingCount()} track(s) via Arte Livre`
+        updates,
+        `Edit ${Object.keys(updates).length} track(s) via Arte Livre`
       );
       state.overrides = data.overrides || { ...state.overrides, ...state.pending };
       state.pending = {};

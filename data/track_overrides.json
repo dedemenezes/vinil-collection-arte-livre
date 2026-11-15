@@ -2,8 +2,15 @@
   "2431835::A3": {
     "bpm": 107,
     "key": "F major",
+    "camelot": "7B",
     "updated_at": "2026-11-15T16:09:37.646Z",
-    "updated_by": "dedemenezes",
-    "camelot": "7B"
+    "updated_by": "dedemenezes"
+  },
+  "6377375::A3": {
+    "bpm": 107,
+    "key": "F major",
+    "camelot": "7B",
+    "updated_at": "2026-11-15T16:09:37.646Z",
+    "updated_by": "dedemenezes"
   }
 }
