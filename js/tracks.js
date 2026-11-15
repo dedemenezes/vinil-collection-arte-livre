@@ -222,6 +222,34 @@
     const original = { bpm: base.bpm, key: base.key, camelot: base.camelot };
     const next = { ...current, [field]: value };
 
+    if (field === "key") {
+      const canonical = window.ArteLivreCamelot.normalizeKey(value);
+      const camelot = window.ArteLivreCamelot.camelotFromKey(canonical);
+      if (canonical) {
+        next.key = canonical;
+        input.value = canonical;
+      }
+      if (camelot) {
+        next.camelot = camelot;
+        const camelotInput = row.querySelector('[data-field="camelot"]');
+        if (camelotInput) camelotInput.value = camelot;
+      }
+    }
+
+    if (field === "camelot") {
+      const canonical = window.ArteLivreCamelot.normalizeCamelot(value);
+      const nota = window.ArteLivreCamelot.keyFromCamelot(canonical);
+      if (canonical) {
+        next.camelot = canonical;
+        input.value = canonical;
+      }
+      if (nota) {
+        next.key = nota;
+        const keyInput = row.querySelector('[data-field="key"]');
+        if (keyInput) keyInput.value = nota;
+      }
+    }
+
     const patch = {};
     ["bpm", "key", "camelot"].forEach((f) => {
       if (next[f] !== original[f]) patch[f] = next[f];
