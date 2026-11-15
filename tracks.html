@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tracks — Arte Livre</title>
+    <meta name="description" content="Busca de faixas com BPM e nota na coleção de vinil Arte Livre." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html">
+        <span class="brand-name">Arte Livre</span>
+        <span class="brand-tag">Coleção de vinil</span>
+      </a>
+      <nav class="nav" aria-label="Principal">
+        <a href="albums.html">Albums</a>
+        <a href="tracks.html" aria-current="page">Tracks</a>
+      </nav>
+    </header>
+
+    <main class="shell">
+      <div class="page-head">
+        <h1>Tracks</h1>
+        <p>Busque faixas por nome, artista ou disco. Filtre por BPM, nota e Camelot.</p>
+        <div class="stats" id="stats"></div>
+      </div>
+
+      <div class="loading" id="loading">Carregando faixas</div>
+
+      <section class="filters" id="filters" hidden>
+        <div class="filters-row">
+          <div class="field field-wide">
+            <label for="q">Busca</label>
+            <input id="q" type="search" placeholder="Faixa, artista ou álbum…" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="album">Álbum / artista do disco</label>
+            <input id="album" type="search" placeholder="Ex: Saturday Night Fever…" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="bpm-min">BPM mín</label>
+            <input id="bpm-min" type="number" min="0" max="300" step="1" placeholder="80" />
+          </div>
+          <div class="field">
+            <label for="bpm-max">BPM máx</label>
+            <input id="bpm-max" type="number" min="0" max="300" step="1" placeholder="120" />
+          </div>
+          <div class="field">
+            <label for="key">Nota</label>
+            <select id="key"></select>
+          </div>
+          <div class="field">
+            <label for="camelot">Camelot</label>
+            <select id="camelot"></select>
+          </div>
+        </div>
+        <div class="filters-actions">
+          <label style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; color: var(--ink);">
+            <input id="only-known" type="checkbox" />
+            Só com BPM e nota
+          </label>
+          <button type="button" class="btn btn-ghost" id="clear">Limpar filtros</button>
+        </div>
+      </section>
+
+      <section id="results" hidden>
+        <p class="result-meta" id="result-meta"></p>
+        <div class="table-wrap" id="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Pos</th>
+                <th>Faixa</th>
+                <th>Artista</th>
+                <th>Álbum</th>
+                <th>BPM</th>
+                <th>Nota</th>
+                <th>Camelot</th>
+                <th>Ano</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+        <div class="pager" id="pager"></div>
+      </section>
+    </main>
+
+    <script src="js/common.js"></script>
+    <script src="js/tracks.js"></script>
+  </body>
+</html>

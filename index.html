@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Arte Livre — Coleção de Vinil</title>
+    <meta name="description" content="Catálogo da coleção de vinil Arte Livre — álbuns e faixas com BPM e nota." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <span class="brand-name">Arte Livre</span>
+        <span class="brand-tag">Coleção de vinil</span>
+      </div>
+      <nav class="nav" aria-label="Principal">
+        <a href="albums.html">Albums</a>
+        <a href="tracks.html">Tracks</a>
+      </nav>
+    </header>
+
+    <main class="shell home">
+      <h1 class="home-brand">Arte Livre</h1>
+      <p class="home-lead">Catálogo da coleção de vinil — busque discos ou faixas com BPM, nota e Camelot.</p>
+      <div class="home-ctas">
+        <a href="albums.html">Albums</a>
+        <a href="tracks.html">Tracks</a>
+      </div>
+      <p class="home-meta" id="home-meta">Carregando acervo…</p>
+    </main>
+
+    <script src="js/common.js"></script>
+    <script>
+      loadJSON("data/meta.json")
+        .then((meta) => {
+          document.getElementById("home-meta").innerHTML =
+            `<strong>${formatNumber(meta.album_count)}</strong> álbuns · <strong>${formatNumber(meta.track_count)}</strong> faixas`;
+        })
+        .catch(() => {
+          document.getElementById("home-meta").textContent = "";
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Albums — Arte Livre</title>
+    <meta name="description" content="Busca de álbuns na coleção de vinil Arte Livre." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html">
+        <span class="brand-name">Arte Livre</span>
+        <span class="brand-tag">Coleção de vinil</span>
+      </a>
+      <nav class="nav" aria-label="Principal">
+        <a href="albums.html" aria-current="page">Albums</a>
+        <a href="tracks.html">Tracks</a>
+      </nav>
+    </header>
+
+    <main class="shell">
+      <div class="page-head">
+        <h1>Albums</h1>
+        <p>Busque por artista, título, selo ou catálogo. Filtre por ano e formato.</p>
+        <div class="stats" id="stats"></div>
+      </div>
+
+      <div class="loading" id="loading">Carregando álbuns</div>
+
+      <section class="filters" id="filters" hidden>
+        <div class="filters-row">
+          <div class="field field-wide">
+            <label for="q">Busca</label>
+            <input id="q" type="search" placeholder="Artista, título, selo ou catálogo…" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="year">Ano</label>
+            <select id="year"></select>
+          </div>
+          <div class="field">
+            <label for="format">Formato</label>
+            <select id="format"></select>
+          </div>
+          <div class="field">
+            <label for="label">Selo</label>
+            <input id="label" type="search" placeholder="Ex: Rawkus, Philips…" autocomplete="off" />
+          </div>
+        </div>
+        <div class="filters-actions">
+          <button type="button" class="btn btn-ghost" id="clear">Limpar filtros</button>
+        </div>
+      </section>
+
+      <section id="results" hidden>
+        <p class="result-meta" id="result-meta"></p>
+        <div class="table-wrap" id="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Artista</th>
+                <th>Título</th>
+                <th>Ano</th>
+                <th>Selo</th>
+                <th>Formato</th>
+                <th>Catálogo</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+        <div class="pager" id="pager"></div>
+      </section>
+    </main>
+
+    <script src="js/common.js"></script>
+    <script src="js/albums.js"></script>
+  </body>
+</html>
